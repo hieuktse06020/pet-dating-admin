@@ -23,17 +23,14 @@ app.use(session({
 	saveUninitialized: true
 }));
 app.use(bodyParser.json());
-app.use(bodyParser.urlencoded({    
+app.use(bodyParser.urlencoded({
   extended: true
-})); 
-
+}));
+// get login
 app.get('/', function (req, res) {
   res.sendFile(path.join(__dirname + '/web/login.html'));
 })
-app.get('/account', function (req, res) {
-  res.sendFile(path.join(__dirname + '/web/account.html'));
-})
-
+// get material
 app.get('/server/web/css/style.css', function (req, res) {
   res.sendFile('web/css/style.css', {root: __dirname })
 })
@@ -45,7 +42,6 @@ app.get('/server/web/css/font-awesome.css', function (req, res) {
 app.get('/server/web/images/1.jpg', function (req, res) {
   res.sendFile('web/images/1.jpg', {root: __dirname })
 })
-
 app.get('/server/web/fonts/fontawesome-webfont.woff', function (req, res) {
   res.sendFile('web/fonts/fontawesome-webfont.woff', {root: __dirname })
 })
@@ -53,9 +49,13 @@ app.get('/server/web/fonts/fontawesome-webfont.woff', function (req, res) {
 app.get('/server/web/fonts/fontawesome-webfont.ttf', function (req, res) {
   res.sendFile('web/fonts/fontawesome-webfont.ttf', {root: __dirname })
 })
+// get account
 app.get('/server/web/account.html', function(req, res){
   res.render('web/account.html', {root: __dirname });
 })
+app.get('/account', function (req, res) {
+	res.sendFile(path.join(__dirname + '/web/account.html'));
+  })
 app.get('web/account.html', function(request, response) {
 	if (request.session.loggedin) {
 		response.send('Welcome back, ' + request.session.username + '!');
@@ -65,6 +65,7 @@ app.get('web/account.html', function(request, response) {
 	response.end();
 });
 
+// Login
 app.post('/auth', function(request, response) {
 	var username = request.body.username;
 	var password = request.body.password;
@@ -84,7 +85,19 @@ app.post('/auth', function(request, response) {
 		response.end();
 	}
 });
+// Logout
+app.get('/logout',function(req,res){
+    req.session.destroy(function(err){
+        if(err){
+            console.log(err);
+        }
+        else
+        {
+        	res.redirect('/');
+        }
+    });
 
+});
 var server = app.listen(3000, function () {
 
   var host = server.address().address
