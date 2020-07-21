@@ -23,6 +23,7 @@ app.use(session({
 	resave: true,
 	saveUninitialized: true
 }));
+app.set('view engine', 'ejs');
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({
   extended: true
@@ -51,12 +52,12 @@ app.get('/server/web/fonts/fontawesome-webfont.ttf', function (req, res) {
   res.sendFile('web/fonts/fontawesome-webfont.ttf', {root: __dirname })
 })
 // get account
-app.get('/server/web/account.html', function(req, res){
-  res.render('web/account.html', {root: __dirname });
-})
-app.get('/account', function (req, res) {
-	res.sendFile(path.join(__dirname + '/web/account.html'));
-  })
+// app.get('/server/web/account.html', function(req, res){
+//   res.render('web/account.html', {root: __dirname });
+// })
+// app.get('/account', function (req, res) {
+// 	res.sendFile(path.join(__dirname + '/web/account.html'));
+//   })
 // get create account
 app.get('/create', function (req, res) {
 	res.sendFile(path.join(__dirname + '/web/createAccount.html'));
@@ -150,6 +151,19 @@ app.post('/change', function(request, response) {
 			response.redirect('/');
 		}
 		response.end();
+	});
+});
+
+// get data from mySql to fetch to account page
+app.get('/account', function(req, res, next){
+	
+	connection.query('SELECT * FROM user',function(error, data, fields){
+		if(error){
+			console.log(error.message);
+		}
+		console.log(data.length);
+		res.render(__dirname + "/web/account.ejs",{userData: data})
+		// res.render('account.ejs',{title: 'account', userData: data});
 	});
 });
 var server = app.listen(3000, function () {
