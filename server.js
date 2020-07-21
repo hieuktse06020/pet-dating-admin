@@ -137,8 +137,20 @@ app.post('/create', function(request, response) {
 });
 
 // Change password for admin
-app.post('/create', function(request, response) {
-	
+app.post('/change', function(request, response) {
+	var accountName = request.body.userNameChange;
+	var password = request.body.newPassword;
+	let data = [password, accountName];
+	connection.query('UPDATE account SET password = ? WHERE accountName = ?', data, function(error, results, fields){
+		if(error){
+			console.log(error.message);
+			response.end();
+		} else{
+			console.log('Rows affected: ', results.affectedRows);
+			response.redirect('/');
+		}
+		response.end();
+	});
 });
 var server = app.listen(3000, function () {
 
