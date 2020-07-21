@@ -4,6 +4,7 @@ var path = require('path');
 var bodyParser = require('body-parser')
 var session = require('express-session');
 var mysql = require('mysql');
+const { query } = require('express');
 var connection = mysql.createConnection({
 	host     : 'us-cdbr-east-02.cleardb.com',
 	user     : 'bf8a1b55c1e2e6',
@@ -56,6 +57,20 @@ app.get('/server/web/account.html', function(req, res){
 app.get('/account', function (req, res) {
 	res.sendFile(path.join(__dirname + '/web/account.html'));
   })
+// get create account
+app.get('/create', function (req, res) {
+	res.sendFile(path.join(__dirname + '/web/createAccount.html'));
+  })
+app.get('/server/web/createAccount.html', function(req, res){
+	res.render('web/createAccount.html', {root: __dirname });
+  })
+// get change password
+app.get('/change', function (req, res) {
+	res.sendFile(path.join(__dirname + '/web/changePassword.html'));
+  })
+app.get('/server/web/changePassword.html', function(req, res){
+	res.render('web/changePassword.html', {root: __dirname });
+  })
 app.get('web/account.html', function(request, response) {
 	if (request.session.loggedin) {
 		response.send('Welcome back, ' + request.session.username + '!');
@@ -64,7 +79,6 @@ app.get('web/account.html', function(request, response) {
 	}
 	response.end();
 });
-
 // Login
 app.post('/auth', function(request, response) {
 	var username = request.body.username;
@@ -97,6 +111,34 @@ app.get('/logout',function(req,res){
         }
     });
 
+});
+// create an account for admin
+app.post('/create', function(request, response) {
+	var userName = request.body.youremail;
+	var passWord = request.body.passwordNew;
+	const role = 1;
+	const acc_status = 1;
+	var account = {
+		accountName: userName,
+		password: passWord,
+		role: role,
+		acc_status: acc_status
+	}
+	connection.query('INSERT INTO account SET ?', account, function(error){
+		if(error){
+			console.log(error.message);
+			response.end();
+		} else{
+			console.log('Create successfully!!!')
+			response.redirect('/');
+		}
+		response.end();
+	});
+});
+
+// Change password for admin
+app.post('/create', function(request, response) {
+	
 });
 var server = app.listen(3000, function () {
 
