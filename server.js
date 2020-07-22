@@ -5,6 +5,7 @@ var bodyParser = require('body-parser')
 var session = require('express-session');
 var mysql = require('mysql');
 const { query } = require('express');
+const { TIMEOUT } = require('dns');
 var connection = mysql.createConnection({
 	host     : 'us-cdbr-east-02.cleardb.com',
 	user     : 'bf8a1b55c1e2e6',
@@ -16,7 +17,6 @@ connection.connect((err) => {
   if (err) throw err;
   console.log('Connected!');
 });
-
 
 app.use(session({
 	secret: 'secret',
@@ -51,13 +51,6 @@ app.get('/server/web/fonts/fontawesome-webfont.woff', function (req, res) {
 app.get('/server/web/fonts/fontawesome-webfont.ttf', function (req, res) {
   res.sendFile('web/fonts/fontawesome-webfont.ttf', {root: __dirname })
 })
-// get account
-// app.get('/server/web/account.html', function(req, res){
-//   res.render('web/account.html', {root: __dirname });
-// })
-// app.get('/account', function (req, res) {
-// 	res.sendFile(path.join(__dirname + '/web/account.html'));
-//   })
 // get create account
 app.get('/create', function (req, res) {
 	res.sendFile(path.join(__dirname + '/web/createAccount.html'));
@@ -86,7 +79,8 @@ app.post('/auth', function(request, response) {
 	var password = request.body.password;
 	if (username && password) {
 		connection.query('SELECT * FROM account WHERE accountName = ? AND password = ?', [username, password], function(error, results) {
-      if (results.length > 0) {
+			if (results.length > 0) {
+				console.log(results[0].accountName);
 				request.session.loggedin = true;
 				request.session.username = username;
 				response.redirect('account');
@@ -156,14 +150,12 @@ app.post('/change', function(request, response) {
 
 // get data from mySql to fetch to account page
 app.get('/account', function(req, res, next){
-	
 	connection.query('SELECT * FROM user',function(error, data, fields){
 		if(error){
 			console.log(error.message);
 		}
 		console.log(data.length);
 		res.render(__dirname + "/web/account.ejs",{userData: data})
-		// res.render('account.ejs',{title: 'account', userData: data});
 	});
 });
 var server = app.listen(3000, function () {

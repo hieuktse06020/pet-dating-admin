@@ -6,14 +6,13 @@
     <div class="row"> 
      <h1 class="text-center">List Account</h1> 
      <div class="col-md-10 col-md-offset-1"> 
-      <div class="panel panel-default panel-table"> 
+      <div class="panel panel-default panel-table" style="width: 1120px;"> 
        <div class="panel-heading"> 
         <div class="row"> 
          <div class="col col-xs-6"> 
           <h3 class="panel-title">Account</h3> 
          </div> 
          <div class="col col-xs-6 text-right"> 
-          <!-- <button type="button" class="btn btn-sm btn-primary btn-create">Add</button>  -->
          </div>   
         </div> 
        </div> 
@@ -28,6 +27,7 @@
            <th>Email</th>
            <th>Enable</th>
            <th>Enable From</th>
+           <th>Avatar</th>
           </tr> 
          </thead> 
          <tbody>
@@ -43,6 +43,7 @@
             <td class="hidden-xs"><%=data.id %></td>
             <td><%=data.name %></td>
             <td><%=data.email %></td>
+            <td><input type="text" value="<%= data.avatar %>" name="avatar"/></td>
             <td><input type="text" value="<%= data.isEnable %>" name="enable"/></td>
             <td><input type="date" value="${data.enableFrom}" name="dateEnable"/><%=data.enableFrom %></td>
            </tr>
