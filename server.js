@@ -5,7 +5,7 @@ var bodyParser = require('body-parser')
 var session = require('express-session');
 var mysql = require('mysql');
 const PORT = process.env.PORT || 3000;
-
+const url = require('url');
 //connection
 var connection = mysql.createPool({
 	host: 'us-cdbr-east-02.cleardb.com',
@@ -143,15 +143,30 @@ app.post('/change', function (request, response) {
 });
 
 // get data from mySql to fetch to account page
+let listUser;
 app.get('/account', function (req, res, next) {
 	connection.query('SELECT * FROM user', function (error, data, fields) {
 		if (error) {
 			console.log(error.message);
 		}
+		listUser = data;
 		console.log(data.length);
 		res.render(__dirname + "/web/account.ejs", { userData: data })
 	});
 });
+// get user manager
+app.get('/manager', function (req, res) {
+	res.sendFile(path.join(__dirname + '/web/userManager.html'));
+})
+app.get('/server/web/userManager.html', function (req, res) {
+	res.render('web/userManager.html', { root: __dirname });
+})
+// Update user
+app.post('/manager', function (req, res) {
+	console.log(listUser);
+	res.redirect(`/manager?id=${1}`)
+});
+
 var server = app.listen(PORT, function () {
 
 	var host = server.address().address

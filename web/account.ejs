@@ -38,7 +38,10 @@
         %>
         <tr>
           <tr>
-            <td align="center"><a class="btn btn-default"><em class="fa fa-pencil"></em></a> <a class="btn btn-danger"><em class="fa fa-trash"></em></a>
+            <td align="center">
+              <form action="manager" method="POST">
+                <input class="btn btn-default" type="submit" name="aaa"><em class="fa fa-pencil" ></em></input>
+              </form>
             </td>
             <td class="hidden-xs"><%=data.id %></td>
             <td><%=data.name %></td>
