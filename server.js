@@ -4,19 +4,14 @@ var path = require('path');
 var bodyParser = require('body-parser')
 var session = require('express-session');
 var mysql = require('mysql');
-const { query } = require('express');
-const { TIMEOUT } = require('dns');
 const PORT = process.env.PORT || 3000;
-var connection = mysql.createConnection({
+
+//connection
+var connection = mysql.createPool({
 	host: 'us-cdbr-east-02.cleardb.com',
 	user: 'bf8a1b55c1e2e6',
 	password: '8c8d6ed8',
 	database: 'heroku_0d15c6611609f1f'
-});
-//check connection
-connection.connect((err) => {
-	if (err) throw err;
-	console.log('Connected!');
 });
 
 app.use(session({
@@ -81,7 +76,6 @@ app.post('/auth', function (request, response) {
 	if (username && password) {
 		connection.query('SELECT * FROM account WHERE accountName = ? AND password = ?', [username, password], function (error, results) {
 			if (results.length > 0) {
-				console.log(results[0].accountName);
 				request.session.loggedin = true;
 				request.session.username = username;
 				response.redirect('account');
