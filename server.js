@@ -163,8 +163,7 @@ app.get('/server/web/userManager.html', function (req, res) {
 })
 // Update user
 app.post('/manager', function (req, res) {
-	console.log(listUser);
-	res.redirect(`/manager?id=${1}`)
+	res.redirect(`/manager`)
 });
 
 var server = app.listen(PORT, function () {
