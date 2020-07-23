@@ -150,22 +150,33 @@ app.get('/account', function (req, res, next) {
 			console.log(error.message);
 		}
 		listUser = data;
-		console.log(data.length);
 		res.render(__dirname + "/web/account.ejs", { userData: data })
 	});
 });
 // get user manager
-app.get('/manager', function (req, res) {
-	res.sendFile(path.join(__dirname + '/web/userManager.html'));
-})
-app.get('/server/web/userManager.html', function (req, res) {
-	res.render('web/userManager.html', { root: __dirname });
-})
+// app.get('/manager', function (req, res) {
+// 	res.sendFile(path.join(__dirname + '/web/userManager.ejs'));
+// 	console.log(req.query.id);
+// })
+// app.get('/server/web/userManager.ejs', function (req, res) {
+// 	res.render('web/userManager.ejs', { root: __dirname });
+// })
 // Update user
 app.post('/manager', function (req, res) {
 	res.redirect(`/manager`)
 });
-
+// Fill data for user manager
+app.get('/manager', function (req, res, next) {
+	let id = req.query.id;
+	connection.query('SELECT * FROM user WHERE id = ?', id, function (error, data, fields) {
+		if (error) {
+			console.log(error.message);
+		}
+		listUser = data;
+		console.log(data);
+		res.render(__dirname + "/web/userManager.ejs", { userData: data })
+	});
+})
 var server = app.listen(PORT, function () {
 
 	var host = server.address().address

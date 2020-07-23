@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html>
+<body>
+
+<h2 style="padding-left: 540px">List user</h2>
+<%
+        if(userData.length!=0){
+        var i=1;
+        userData.forEach(function(data){
+        %>
+        <form action="/action_page.php" style="padding-left: 500px;">
+            <label for="id">ID: <%=data.id %></label><br>
+            Name:<br> <input type="text" id="username" name="username" value="<%=data.name %>"><br>
+            <label for="Email">Email: <%=data.email %></label><br>
+            Enable:<br> <input type="text" id="enable" name="enable" value="<%=data.isEnable %>"><br>
+            EnableFrom:<br> <input type="text" value="<%=data.enableFrom %>" name="enableFrom"><br>
+            Avatar:<br> <input type="text" value="<%=data.avatar %>" name="avatar"><br>
+            Image:<br> <input type="text" value="???" name="Image"><br><br>
+            <input type="button" value="Update" style="margin-left: 50px;">
+          </form>
+        <%  i++; }) %>
+        <% } else{ %>
+            <tr>
+                <td colspan="7">No Data Found</td>
+            </tr>
+        <% } %>
+
+
+
+
+</body>
+</html>
