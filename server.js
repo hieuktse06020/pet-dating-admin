@@ -188,6 +188,8 @@ app.post('/manager', function (request, response) {
 			response.end();
 		});
 });
+
+// SERVER
 var server = app.listen(PORT, function () {
 
 	var host = server.address().address
