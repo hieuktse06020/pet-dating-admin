@@ -140,16 +140,43 @@ app.post('/change', function (request, response) {
 		response.end();
 	});
 });
-
-// get data from mySql to fetch to account page
+//get account
 app.get('/account', function (req, res, next) {
 	if(req.session.loggedin){
-		connection.query('SELECT * FROM user', function (error, data, fields) {
-			if (error) {
-				console.log(error.message);
-			}
-			res.render(__dirname + "/web/account.ejs", { userData: data })
-		});
+		let query = 'SELECT * FROM user';
+			connection.query(query, function (error, data, fields) {
+				if (error) {
+					console.log(error.message);
+				}
+				res.render(__dirname + "/web/account.ejs", { userData: data })
+			});
+	} else {
+		res.send('You must login!!');
+	}
+});
+// post data from mySql to fetch to account page
+app.post('/account', function (req, res, next) {
+	if(req.session.loggedin){
+		let searchValue = req.body.searchValue;
+		let query = 'SELECT * FROM user';
+		if (searchValue === undefined) {
+			query = 'SELECT * FROM user';
+			connection.query(query, function (error, data, fields) {
+				if (error) {
+					console.log(error.message);
+				}
+				res.render(__dirname + "/web/account.ejs", { userData: data })
+			});
+		}
+		else {
+			query = 'SELECT * FROM user WHERE name LIKE "%' + searchValue + '%"';
+			connection.query(query, function (error, data, fields) {
+				if (error) {
+					console.log(error.message);
+				}
+				res.render(__dirname + "/web/account.ejs", { userData: data })
+			});
+		}
 	} else {
 		res.send('You must login!!');
 	}
