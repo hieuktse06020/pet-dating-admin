@@ -5,8 +5,6 @@ var bodyParser = require('body-parser')
 var session = require('express-session');
 var mysql = require('mysql');
 const PORT = process.env.PORT || 3000;
-const url = require('url');
-const { query } = require('express');
 //connection
 var connection = mysql.createPool({
 	host: 'us-cdbr-east-02.cleardb.com',
@@ -144,30 +142,32 @@ app.post('/change', function (request, response) {
 });
 
 // get data from mySql to fetch to account page
-let listUser;
 app.get('/account', function (req, res, next) {
-	connection.query('SELECT * FROM user', function (error, data, fields) {
-		if (error) {
-			console.log(error.message);
-		}
-		listUser = data;
-		res.render(__dirname + "/web/account.ejs", { userData: data })
-	});
+	if(req.session.loggedin){
+		connection.query('SELECT * FROM user', function (error, data, fields) {
+			if (error) {
+				console.log(error.message);
+			}
+			res.render(__dirname + "/web/account.ejs", { userData: data })
+		});
+	} else {
+		res.send('You must login!!');
+	}
 });
-// Update user
-// app.post('/manager', function (req, res) {
-// 	res.redirect(`/manager`)
-// });
 // Fill data for user manager
 app.get('/manager', function (req, res, next) {
 	let id = req.query.id;
-	connection.query('SELECT * FROM user WHERE id = ?', id, function (error, data, fields) {
-		if (error) {
-			console.log(error.message);
-		}
-		listUser = data;
-		res.render(__dirname + "/web/userManager.ejs", { userData: data })
-	});
+	if(req.session.loggedin){
+		connection.query('SELECT * FROM user WHERE id = ?', id, function (error, data, fields) {
+			if (error) {
+				console.log(error.message);
+			}
+			listUser = data;
+			res.render(__dirname + "/web/userManager.ejs", { userData: data })
+		});
+	} else {
+		res.send('You must login!');
+	}
 })
 //Update user
 app.post('/manager', function (request, response) {
