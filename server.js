@@ -6,6 +6,7 @@ var session = require('express-session');
 var mysql = require('mysql');
 const PORT = process.env.PORT || 3000;
 const url = require('url');
+const { query } = require('express');
 //connection
 var connection = mysql.createPool({
 	host: 'us-cdbr-east-02.cleardb.com',
@@ -153,18 +154,10 @@ app.get('/account', function (req, res, next) {
 		res.render(__dirname + "/web/account.ejs", { userData: data })
 	});
 });
-// get user manager
-// app.get('/manager', function (req, res) {
-// 	res.sendFile(path.join(__dirname + '/web/userManager.ejs'));
-// 	console.log(req.query.id);
-// })
-// app.get('/server/web/userManager.ejs', function (req, res) {
-// 	res.render('web/userManager.ejs', { root: __dirname });
-// })
 // Update user
-app.post('/manager', function (req, res) {
-	res.redirect(`/manager`)
-});
+// app.post('/manager', function (req, res) {
+// 	res.redirect(`/manager`)
+// });
 // Fill data for user manager
 app.get('/manager', function (req, res, next) {
 	let id = req.query.id;
@@ -173,10 +166,28 @@ app.get('/manager', function (req, res, next) {
 			console.log(error.message);
 		}
 		listUser = data;
-		console.log(data);
 		res.render(__dirname + "/web/userManager.ejs", { userData: data })
 	});
 })
+//Update user
+app.post('/manager', function (request, response) {
+	let id = request.body.idUpdate;
+	var privacy = request.body.privacy;
+	var enable = request.body.enableUpdate;
+	var enableFrom = request.body.enableFromUpdate;
+	var avatar = request.body.avatarUpdate;
+	var Image = request.body.ImageUpdate;
+		connection.query('UPDATE user SET privacy = ?, avatar = ?, isEnable = ?, enableFrom = ? WHERE ID = ?', [privacy, avatar, enable, enableFrom, id], function (error, results) {
+			if (error) {
+				console.log(error.message)
+				response.send('No column update ')
+			} else {
+				console.log(results.affectedRows + " record(s) updated");
+				response.redirect('account');
+			}
+			response.end();
+		});
+});
 var server = app.listen(PORT, function () {
 
 	var host = server.address().address

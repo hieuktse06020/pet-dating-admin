@@ -2,21 +2,22 @@
 <html>
 <body>
 
-<h2 style="padding-left: 540px">List user</h2>
+<h2 style="padding-left: 560px">List user</h2>
 <%
         if(userData.length!=0){
         var i=1;
         userData.forEach(function(data){
         %>
-        <form action="/action_page.php" style="padding-left: 500px;">
-            <label for="id">ID: <%=data.id %></label><br>
-            Name:<br> <input type="text" id="username" name="username" value="<%=data.name %>"><br>
-            <label for="Email">Email: <%=data.email %></label><br>
-            Enable:<br> <input type="text" id="enable" name="enable" value="<%=data.isEnable %>"><br>
-            EnableFrom:<br> <input type="text" value="<%=data.enableFrom %>" name="enableFrom"><br>
-            Avatar:<br> <input type="text" value="<%=data.avatar %>" name="avatar"><br>
-            Image:<br> <input type="text" value="???" name="Image"><br><br>
-            <input type="button" value="Update" style="margin-left: 50px;">
+        <form action="manager" method="POST" style="padding-left: 500px;">
+            ID:<br><input type="text" style="width: 212px;" name="idUpdate" value="<%=data.id %>" readonly><br>
+            Name:<br> <input type="text" style="width: 212px;" id="username" name="usernameUpdate" value="<%=data.name %>" readonly><br>
+            Privacy(0 or 1):<br> <input type="text" style="width: 212px;" id="privacy" name="privacy" value="<%=data.privacy %>" pattern="[0-1]"><br>
+            Email:<br> <input type="text" style="width: 212px;" id="EmailUpdate" name="EmailUpdate" value="<%=data.email %>" readonly><br>
+            Enable(0 or 1):<br> <input type="text" style="width: 212px;" id="enable" name="enableUpdate" value="<%=data.isEnable %>" pattern="[0-1]"><br>
+            EnableFrom:<br> <input type="datetime-local" value="<%=data.enableFrom %>" name="enableFromUpdate"><br>
+            Avatar:<br> <input type="text" style="width: 212px;" value="<%=data.avatar %>" name="avatarUpdate"><br>
+            Image:<br> <input type="text" style="width: 212px;" value="???" name="ImageUpdate"><br><br>
+            <input type="submit" value="Update" style="margin-left: 80px;">
           </form>
         <%  i++; }) %>
         <% } else{ %>
