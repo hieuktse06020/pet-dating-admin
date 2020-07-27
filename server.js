@@ -77,7 +77,7 @@ app.post('/auth', function (request, response) {
 			if (results.length > 0) {
 				request.session.loggedin = true;
 				request.session.username = username;
-				response.redirect('account');
+				response.redirect('report');
 			} else {
 				response.send('Incorrect Username and/or Password!');
 			}
@@ -215,7 +215,47 @@ app.post('/manager', function (request, response) {
 			response.end();
 		});
 });
-
+//get report
+app.get('/report', function (req, res, next) {
+	if(req.session.loggedin){
+		let query = 'SELECT * FROM feedback';
+			connection.query(query, function (error, data, fields) {
+				if (error) {
+					console.log(error.message);
+				}
+				res.render(__dirname + "/web/reportManager.ejs", { userData: data })
+			});
+	} else {
+		res.send('You must login!!');
+	}
+});
+// post data from mySql to fetch to report page
+app.post('/report', function (req, res, next) {
+	if(req.session.loggedin){
+		let searchValue = req.body.searchValue;
+		let query = 'SELECT * FROM feedback';
+		if (searchValue === undefined) {
+			query = 'SELECT * FROM feedback';
+			connection.query(query, function (error, data, fields) {
+				if (error) {
+					console.log(error.message);
+				}
+				res.render(__dirname + "/web/reportManager.ejs", { userData: data })
+			});
+		}
+		else {
+			query = 'SELECT * FROM feedback WHERE name LIKE "%' + searchValue + '%"';
+			connection.query(query, function (error, data, fields) {
+				if (error) {
+					console.log(error.message);
+				}
+				res.render(__dirname + "/web/reportManager.ejs", { userData: data })
+			});
+		}
+	} else {
+		res.send('You must login!!');
+	}
+});
 // SERVER
 var server = app.listen(PORT, function () {
 
