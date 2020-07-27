@@ -4,6 +4,7 @@ var path = require('path');
 var bodyParser = require('body-parser')
 var session = require('express-session');
 var mysql = require('mysql');
+const { response } = require('express');
 const PORT = process.env.PORT || 3000;
 //connection
 var connection = mysql.createPool({
@@ -151,7 +152,7 @@ app.get('/account', function (req, res, next) {
 				res.render(__dirname + "/web/account.ejs", { userData: data })
 			});
 	} else {
-		res.send('You must login!!');
+		res.redirect('/');
 	}
 });
 // post data from mySql to fetch to account page
@@ -178,7 +179,7 @@ app.post('/account', function (req, res, next) {
 			});
 		}
 	} else {
-		res.send('You must login!!');
+		res.redirect('/');
 	}
 });
 // Fill data for user manager
@@ -193,7 +194,7 @@ app.get('/manager', function (req, res, next) {
 			res.render(__dirname + "/web/userManager.ejs", { userData: data })
 		});
 	} else {
-		res.send('You must login!');
+		res.redirect('/');
 	}
 })
 //Update user
@@ -204,7 +205,7 @@ app.post('/manager', function (request, response) {
 	var enableFrom = request.body.enableFromUpdate;
 	var avatar = request.body.avatarUpdate;
 	var Image = request.body.ImageUpdate;
-		connection.query('UPDATE user SET privacy = ?, avatar = ?, isEnable = ?, enableFrom = ? WHERE ID = ?', [privacy, avatar, enable, enableFrom, id], function (error, results) {
+		connection.query('UPDATE user SET privacy = ?, avatar = ?, isEnable = ?, enableFrom = ? WHERE uid = ?', [privacy, avatar, enable, enableFrom, id], function (error, results) {
 			if (error) {
 				console.log(error.message)
 				response.send('No column update ')
@@ -226,7 +227,7 @@ app.get('/report', function (req, res, next) {
 				res.render(__dirname + "/web/reportManager.ejs", { userData: data })
 			});
 	} else {
-		res.send('You must login!!');
+		res.redirect('/');
 	}
 });
 // post data from mySql to fetch to report page
@@ -253,8 +254,39 @@ app.post('/report', function (req, res, next) {
 			});
 		}
 	} else {
-		res.send('You must login!!');
+		res.redirect('/');
 	}
+});
+let id
+//get report
+app.get('/image', function (req, res, next) {
+	if(req.session.loggedin){
+		id = req.query.id;
+		let query = 'SELECT u.name, p.avatar, p.id FROM USER u INNER JOIN pet p ON u.uid = p.user_id WHERE uid = ?';
+			connection.query(query, id, function (error, data, fields) {
+				if (error) {
+					console.log(error.message);
+				}
+				res.render(__dirname + "/web/image.ejs", { userData: data })
+			});
+	} else {
+		res.redirect('/');
+	}
+});
+// post image
+app.post('/image', function (req, res, next) {
+	let image = req.body.textareaImage;
+	let petID = req.body.pet_id;
+	connection.query('UPDATE pet SET avatar = ? WHERE ID = ?', [image, petID], function (error, results) {
+		if (error) {
+			console.log(error.message)
+			response.send('No column update ')
+		} else {
+			console.log(results.affectedRows + " record(s) updated");
+			res.redirect(`image?id=${id}`);
+		}
+		res.end();
+	});
 });
 // SERVER
 var server = app.listen(PORT, function () {

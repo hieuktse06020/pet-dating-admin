@@ -10,17 +10,18 @@
        <div class="panel-heading"> 
         <div class="row"> 
          <div class="col col-xs-6"> 
-          <h3 class="panel-title"><form action="report" method="POST"><input type="submit" value="Search"><input type="text" name="searchValue" ></form></h3>
+          
           <h4><a href="/account">
             Manager Account
           </a></h4>
           <div class="buttonLogOut" style=" font-size: large">
             <p>
-                <a href="/logout">
+                <a href="/logout" style="color: orange;">
                   Logout <span class="glyphicon glyphicon-log-out"></span>
                 </a>
               </p>
          </div>
+         <h3 class="panel-title"><form action="report" method="POST"><input type="submit" value="Search"><input type="text" name="searchValue" ></form></h3>
          </div> 
          <div class="col col-xs-6 text-right"> 
          </div>   
@@ -33,6 +34,7 @@
            <th class="hidden-xs">ID</th> 
            <th>UserName</th>
            <th>Content</th>
+           <th>Date of feedback</th>
           </tr> 
          </thead> 
          <tbody>
@@ -46,6 +48,7 @@
             <td class="hidden-xs"><%=data.id %></td>
             <td><input type="text" value="<%= data.name %>" name="name"/></td>
             <td><textarea><%=data.content %></textarea></td>
+            <td><%=data.feedbacktime %></td>
            </tr>
         </tr>
         <%  i++; }) %>
@@ -57,31 +60,6 @@
 
         </tbody></table>
        </div>
-       <!-- <div class="panel-footer">
-        <div class="row"> 
-         <div class="col col-xs-4">Trang 1 của 5 </div> 
-         <div class="col col-xs-8"> 
-          <ul class="pagination hidden-xs pull-right"> 
-           <li><a href="http://hocwebgiare.com/#">1</a>
-           </li> 
-           <li><a href="http://hocwebgiare.com/#">2</a>
-           </li> 
-           <li><a href="http://hocwebgiare.com/#">3</a>
-           </li> 
-           <li><a href="http://hocwebgiare.com/#">4</a>
-           </li> 
-           <li><a href="http://hocwebgiare.com/#">5</a>
-           </li> 
-          </ul> 
-          <ul class="pagination visible-xs pull-right"> 
-           <li><a href="http://hocwebgiare.com/#">«</a>
-           </li> 
-           <li><a href="http://hocwebgiare.com/#">»</a>
-           </li> 
-          </ul> 
-         </div> 
-        </div> 
-       </div> -- -->
       </div> 
      </div> 
     </div>

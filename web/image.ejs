@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html>
+<body>
+
+<h2 style="padding-left: 520px; color: crimson;">List Image</h2>
+<%
+        if(userData.length!=0){
+        var i=1;
+        userData.forEach(function(data){
+        %>
+        <form action="image" method="POST" style="padding-left: 300px;">
+            <br> <input type="text" name="pet_id" value="<%=data.id %>" readonly>
+            <br> <input type="text" style="width: 600px; height: 100px;" name="textareaImage" value="<%=data.avatar %>"><br>
+            <input type="submit" value="Update" style="margin-left: 230px;">
+          </form>
+        <%  i++; }) %>
+        <% } else{ %>
+            <tr>
+                <td colspan="7">No Data Found</td>
+            </tr>
+        <% } %>
+
+
+
+
+</body>
+</html>

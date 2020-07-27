@@ -2,21 +2,23 @@
 <html>
 <body>
 
-<h2 style="padding-left: 560px">List user</h2>
+<h1 style="padding-left: 560px">List user</h1>
 <%
         if(userData.length!=0){
         var i=1;
         userData.forEach(function(data){
         %>
         <form action="manager" method="POST" style="padding-left: 500px;">
-            ID:<br><input type="text" style="width: 212px;" name="idUpdate" value="<%=data.id %>" readonly><br>
+            <h2><a href="/image?id=<%=data.uid %>" style="color: brown; text-decoration: none;">
+                Manager Post
+              </a></h2>
+            ID:<br><input type="text" style="width: 212px;" name="idUpdate" value="<%=data.uid %>" readonly><br>
             Name:<br> <input type="text" style="width: 212px;" id="username" name="usernameUpdate" value="<%=data.name %>" readonly><br>
             Privacy(0 or 1):<br> <input type="text" style="width: 212px;" id="privacy" name="privacy" value="<%=data.privacy %>" pattern="[0-1]"><br>
             Email:<br> <input type="text" style="width: 212px;" id="EmailUpdate" name="EmailUpdate" value="<%=data.email %>" readonly><br>
             Enable(0 or 1):<br> <input type="text" style="width: 212px;" id="enable" name="enableUpdate" value="<%=data.isEnable %>" pattern="[0-1]"><br>
             EnableFrom:<br> <input type="datetime-local" value="<%=data.enableFrom %>" name="enableFromUpdate"><br>
             Avatar:<br> <input type="text" style="width: 212px;" value="<%=data.avatar %>" name="avatarUpdate"><br>
-            Image:<br> <input type="text" style="width: 212px;" value="???" name="ImageUpdate"><br><br>
             <input type="submit" value="Update" style="margin-left: 80px;">
           </form>
         <%  i++; }) %>
