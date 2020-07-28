@@ -105,6 +105,7 @@ app.get('/logout', function (req, res) {
 app.post('/create', function (request, response) {
 	var userName = request.body.youremail;
 	var passWord = request.body.passwordNew;
+	var re_password = request.body.rePassword;
 	const role = 1;
 	const acc_status = 1;
 	var account = {
@@ -113,16 +114,28 @@ app.post('/create', function (request, response) {
 		role: role,
 		acc_status: acc_status
 	}
-	connection.query('INSERT INTO account SET ?', account, function (error) {
-		if (error) {
-			console.log(error.message);
-			response.end();
-		} else {
-			console.log('Create successfully!!!')
-			response.redirect('/');
+	connection.query('select * from account', function(error, data,fields){
+		accounts = data;
+		for(let i = 0; i < data.length; i++){
+			if(data[i].accountName === userName){
+				return response.send('Your email already exits!')
+			}
 		}
-		response.end();
 	});
+	if(passWord === re_password){
+		connection.query('INSERT INTO account SET ?', account, function (error) {
+			if (error) {
+				console.log(error.message);
+				response.end();
+			} else {
+				console.log('Create successfully!!!')
+				return response.redirect('/');
+			}
+			return response.end();
+		});
+	} else{
+		 response.send('incorrect Re-password!');
+	}
 });
 
 // Change password for admin
@@ -130,15 +143,18 @@ app.post('/change', function (request, response) {
 	var accountName = request.body.userNameChange;
 	var password = request.body.newPassword;
 	let data = [password, accountName];
-	connection.query('UPDATE account SET password = ? WHERE accountName = ?', data, function (error, results, fields) {
+		connection.query('UPDATE account SET password = ? WHERE accountName = ?', data, function (error, results, fields) {
 		if (error) {
 			console.log(error.message);
 			response.end();
 		} else {
+			if(results.affectedRows === 0){
+				return response.send('Your email does not exit!');
+			}
 			console.log('Rows affected: ', results.affectedRows);
 			response.redirect('/');
 		}
-		response.end();
+		return response.end();
 	});
 });
 //get account
