@@ -114,11 +114,11 @@ app.post('/create', function (request, response) {
 		role: role,
 		acc_status: acc_status
 	}
-	connection.query('select * from account', function(error, data,fields){
-		accounts = data;
+	connection.query('select accountName from account', function(error, data,fields){
 		for(let i = 0; i < data.length; i++){
 			if(data[i].accountName === userName){
-				return response.send('Your email already exits!')
+				console.log(data[i].accountName);
+				response.send('Your email already exits!')
 			}
 		}
 	});
@@ -131,10 +131,10 @@ app.post('/create', function (request, response) {
 				console.log('Create successfully!!!')
 				return response.redirect('/');
 			}
-			return response.end();
+			response.end();
 		});
 	} else{
-		 response.send('incorrect Re-password!');
+		return response.send('incorrect Re-password!');
 	}
 });
 
