@@ -16,8 +16,8 @@
             Name:<br> <input type="text" style="width: 212px;" id="username" name="usernameUpdate" value="<%=data.name %>" readonly><br>
             Privacy(0 or 1):<br> <input type="text" style="width: 212px;" id="privacy" name="privacy" value="<%=data.privacy %>" pattern="[0-1]"><br>
             Email:<br> <input type="text" style="width: 212px;" id="EmailUpdate" name="EmailUpdate" value="<%=data.email %>" readonly><br>
-            Enable(0 or 1):<br> <input type="text" style="width: 212px;" id="enable" name="enableUpdate" value="<%=data.isEnable %>" pattern="[0-1]"><br>
-            EnableFrom:<br> <input type="datetime-local" value="<%=data.enableFrom %>" name="enableFromUpdate"><br>
+            Is Block(0 or 1):<br> <input type="text" style="width: 212px;" id="enable" name="enableUpdate" value="<%=data.is_block %>" pattern="[0-1]"><br>
+            Block Deadline:<br> <input type="datetime-local" value="<%=data.block_deadline %>" name="enableFromUpdate"><br>
             Avatar:<br> <input type="text" style="width: 212px;" value="<%=data.avatar %>" name="avatarUpdate"><br>
             <input type="submit" value="Update" style="margin-left: 80px;">
           </form>

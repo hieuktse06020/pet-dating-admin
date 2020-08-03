@@ -221,7 +221,7 @@ app.post('/manager', function (request, response) {
 	var enableFrom = request.body.enableFromUpdate;
 	var avatar = request.body.avatarUpdate;
 	var Image = request.body.ImageUpdate;
-		connection.query('UPDATE user SET privacy = ?, avatar = ?, isEnable = ?, enableFrom = ? WHERE uid = ?', [privacy, avatar, enable, enableFrom, id], function (error, results) {
+		connection.query('UPDATE user SET privacy = ?, avatar = ?, is_block = ?, block_deadline = ? WHERE uid = ?', [privacy, avatar, enable, enableFrom, id], function (error, results) {
 			if (error) {
 				console.log(error.message)
 				response.send('No column update ')
