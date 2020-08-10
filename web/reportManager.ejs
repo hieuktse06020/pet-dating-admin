@@ -2,17 +2,24 @@
 <link rel="stylesheet" href="css/account.css"/> 
 <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.4.0/css/font-awesome.min.css" rel="stylesheet" type="text/css"> <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>
 <script src="js/jquery-1.11.1.min.js"></script>
-<div class="container" style="margin: auto;"> 
+<body style="background-image: url(https://geniusmindgraphics.com/wp-content/uploads/2017/11/mobile-app-background.jpeg);">
+
+<div class="container" style="margin-right: 180px;"> 
     <div class="row"> 
-     <h1 class="text-center">List Post</h1> 
+     <h1 class="text-center" style="color: black;">List Post</h1> 
      <div class="col-md-10 col-md-offset-1"> 
       <div class="panel panel-default panel-table" style="width: 1120px"> 
        <div class="panel-heading"> 
         <div class="row"> 
          <div class="col col-xs-6"> 
-          
           <h4><a href="/account">
             Manager Account
+          </a></h4>
+          <h4><a href="/petBreed">
+            Pet Breed
+          </a></h4>
+          <h4><a href="/vip">
+            List Vip Message
           </a></h4>
           <div class="buttonLogOut" style=" font-size: large">
             <p>
@@ -57,10 +64,13 @@
                 <td colspan="7">No Data Found</td>
             </tr>
         <% } %>
-
+        <% for(var j = 1; j < 10; j++) {%>
+          <a href="/report?page=<%= j %>"><label style="margin: 5px;"><%= j %></label></a>
+       <% } %>
         </tbody></table>
        </div>
       </div> 
      </div> 
     </div>
    </div>
+  </body>
