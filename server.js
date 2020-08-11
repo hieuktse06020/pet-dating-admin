@@ -117,7 +117,6 @@ app.post('/create', function (request, response) {
 	connection.query('select accountName from account', function(error, data,fields){
 		for(let i = 0; i < data.length; i++){
 			if(data[i].accountName === userName){
-				console.log(data[i].accountName);
 				response.send('Your email already exits!')
 			}
 		}
@@ -288,7 +287,7 @@ app.post('/report', function (req, res, next) {
 		res.redirect('/');
 	}
 });
-let id
+let id;
 //get report
 app.get('/image', function (req, res, next) {
 	if(req.session.loggedin){
@@ -319,7 +318,6 @@ app.post('/image', function (req, res, next) {
 		res.end();
 	});
 });
-
 
 
 //get petBreed
@@ -418,22 +416,33 @@ app.get('/addPet', function (req, res) {
 app.get('/server/web/addPet.html', function (req, res) {
 	res.render('web/addPet.html', { root: __dirname });
 })
-
 // Add new Breed
 app.post('/addPet', function (request, response) {
 	var breed = request.body.petBreed;
-	console.log(breed);
-	if(request.session.loggedin){
-		connection.query(`INSERT INTO pet_breed(name) VALUES('${breed}')`, function (error) {
-			if (error) {
-				console.log(error.message);
-				response.end();
-			} else {
-				console.log('Create successfully!!!')
-				return response.redirect('petBreed');
+	let flat = true;
+	connection.query('select name from pet_breed', function(error, data,fields){
+		for(let i = 0; i < data.length; i++){
+			console.log(data[i].name);
+			if(data[i].name === breed){
+				flat = false;
 			}
-			response.end();
-		});
+		}
+	});
+	if(request.session.loggedin){
+		if(flat === true){
+			connection.query(`INSERT INTO pet_breed(name) VALUES('${breed}')`, function (error) {
+				if (error) {
+					console.log(error.message);
+					response.end();
+				} else {
+					console.log('Create successfully!!!')
+					return response.redirect('petBreed');
+				}
+				response.end();
+			});
+		} else {
+			response.send('Breed already exit!')
+		}
 	} else{
 		return response.send('You must login!');
 	}
