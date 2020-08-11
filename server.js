@@ -453,7 +453,7 @@ app.get('/vip', function (req, res, next) {
 		var offset;
 		offset = (limit * pageNumber) - limit;
 		if(offset < 0) offset = 0;
-		let query = `SELECT u.id, u.name, uv.message, uv.send_time FROM USER u INNER JOIN user_vip uv ON u.uid = uv.uid ORDER BY u.id ASC LIMIT 5 OFFSET ${offset}` ;
+		let query = `SELECT u.id, u.name, uv.confirm_img, uv.send_time FROM USER u INNER JOIN user_vip uv ON u.uid = uv.uid ORDER BY u.id ASC LIMIT 5 OFFSET ${offset}` ;
 			connection.query(query, function (error, data, fields) {
 				if (error) {
 					console.log(error.message);
@@ -468,9 +468,9 @@ app.get('/vip', function (req, res, next) {
 app.post('/vip', function (req, res, next) {
 	if(req.session.loggedin){
 		let searchValue = req.body.searchValue;
-		let query = 'SELECT u.id, u.name, uv.message, uv.send_time FROM USER u INNER JOIN user_vip uv ON u.uid = uv.uid';
+		let query = 'SELECT u.id, u.name, uv.confirm_img, uv.send_time FROM USER u INNER JOIN user_vip uv ON u.uid = uv.uid';
 		if (searchValue === undefined) {
-			query = 'SELECT u.id, u.name, uv.message, uv.send_time FROM USER u INNER JOIN user_vip uv ON u.uid = uv.uid';
+			query = 'SELECT u.id, u.name, uv.confirm_img, uv.send_time FROM USER u INNER JOIN user_vip uv ON u.uid = uv.uid';
 			connection.query(query, function (error, data, fields) {
 				if (error) {
 					console.log(error.message);
@@ -479,7 +479,7 @@ app.post('/vip', function (req, res, next) {
 			});
 		}
 		else {
-			query = 'SELECT u.id, u.name, uv.message, uv.send_time FROM USER u INNER JOIN user_vip uv ON u.uid = uv.uid WHERE name LIKE "%' + searchValue + '%"';
+			query = 'SELECT u.id, u.name, uv.confirm_img, uv.send_time FROM USER u INNER JOIN user_vip uv ON u.uid = uv.uid WHERE name LIKE "%' + searchValue + '%"';
 			connection.query(query, function (error, data, fields) {
 				if (error) {
 					console.log(error.message);
