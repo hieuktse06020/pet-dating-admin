@@ -49,13 +49,6 @@ app.get('/server/web/fonts/fontawesome-webfont.woff', function (req, res) {
 app.get('/server/web/fonts/fontawesome-webfont.ttf', function (req, res) {
 	res.sendFile('web/fonts/fontawesome-webfont.ttf', { root: __dirname })
 })
-// get create account
-app.get('/create', function (req, res) {
-	res.sendFile(path.join(__dirname + '/web/createAccount.html'));
-})
-app.get('/server/web/createAccount.html', function (req, res) {
-	res.render('web/createAccount.html', { root: __dirname });
-})
 // get change password
 app.get('/change', function (req, res) {
 	res.sendFile(path.join(__dirname + '/web/changePassword.html'));
@@ -102,40 +95,7 @@ app.get('/logout', function (req, res) {
 		}
 	});
 
-});
-// create an account for admin
-app.post('/create', function (request, response) {
-	var userName = request.body.youremail;
-	var passWord = request.body.passwordNew;
-	var re_password = request.body.rePassword;
-	const acc_status = 1;
-	var account = {
-		accountName: userName,
-		password: passWord,
-		acc_status: acc_status
-	}
-	connection.query('select accountName from account', function(error, data,fields){
-		for(let i = 0; i < data.length; i++){
-			if(data[i].accountName === userName){
-				response.send('Your email already exits!')
-			}
-		}
-	});
-	if(passWord === re_password){
-		connection.query('INSERT INTO account SET ?', account, function (error) {
-			if (error) {
-				console.log(error.message);
-				response.end();
-			} else {
-				console.log('Create successfully!!!')
-				return response.redirect('/');
-			}
-			response.end();
-		});
-	} else{
-		return response.send('incorrect Re-password!');
-	}
-});
+})
 
 // Change password for admin
 app.post('/change', function (request, response) {
@@ -288,7 +248,7 @@ app.post('/report', function (req, res, next) {
 	}
 });
 let id;
-//get report
+//get image
 app.get('/image', function (req, res, next) {
 	if(req.session.loggedin){
 		id = req.query.id;
@@ -368,13 +328,6 @@ app.post('/petBreed', function (req, res, next) {
 		res.redirect('/');
 	}
 });
-
-
-
-
-
-
-
 // Fill data for updateBreed
 app.get('/updateBreed', function (req, res, next) {
 	let id = req.query.id;
@@ -390,7 +343,7 @@ app.get('/updateBreed', function (req, res, next) {
 		res.redirect('/');
 	}
 })
-//Update user
+//Update breed
 app.post('/updateBreed', function (request, response) {
 	let id = request.body.idUpdate;
 	var name = request.body.namePet;
@@ -409,7 +362,7 @@ app.post('/updateBreed', function (request, response) {
 
 
 
-// get add new pet
+// get add new breed
 app.get('/addPet', function (req, res) {
 	res.sendFile(path.join(__dirname + '/web/addPet.html'));
 })
@@ -447,12 +400,7 @@ app.post('/addPet', function (request, response) {
 		return response.send('You must login!');
 	}
 });
-
-
-
-
-
-//get account
+//get vip
 app.get('/vip', function (req, res, next) {
 	if(req.session.loggedin){
 		var url_parts = url.parse(req.url, true);
@@ -473,7 +421,7 @@ app.get('/vip', function (req, res, next) {
 		res.redirect('/');
 	}
 });
-// post data from mySql to fetch to account page
+// post data from mySql to fetch to vip page
 app.post('/vip', function (req, res, next) {
 	if(req.session.loggedin){
 		let searchValue = req.body.searchValue;
