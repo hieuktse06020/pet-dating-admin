@@ -10,8 +10,10 @@
         %>
         <form action="updateURL" method="POST" style="padding-left: 500px;">
             <!-- ID:<br><input type="text" style="width: 212px;" name="idUpdate" value="<%=data.uid %>" readonly><br> -->
-            Image:<br> <input type="text" style="width: 212px;" value="<%=data.img %>" name="avatarUpdate"><br>
-            <input type="submit" value="Update" style="margin-left: 80px;">
+            <input style="background-color: aqua; width: 50px;" type="text" value="Image <%=i %>:"><br>
+            <input style="width: 120px; height: 120px;;" type="image" src="<%=data.img %>">
+            <input type="text" style="width: 212px;" value="<%=data.img %>" name="avatarUpdate"><br>
+            <input type="submit" value="Update" style="margin-left: 20px;">
           </form>
         <%  i++; }) %>
         <% } else{ %>
