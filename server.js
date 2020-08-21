@@ -417,7 +417,7 @@ app.get('/vip', function (req, res) {
 		var offset;
 		offset = (limit * pageNumber) - limit;
 		if(offset < 0) offset = 0;
-		let query = `SELECT u.id, u.name, uv.confirm_img, uv.from_date, uv.to_date, uv.status FROM USER u INNER JOIN user_vip uv ON u.uid = uv.uid ORDER BY u.id ASC LIMIT 5 OFFSET ${offset}` ;
+		let query = `SELECT uv.id, u.name, uv.confirm_img, uv.from_date, uv.to_date, uv.status FROM USER u INNER JOIN user_vip uv ON u.uid = uv.uid ORDER BY u.id ASC LIMIT 5 OFFSET ${offset}` ;
 			connection.query(query, function (error, data, fields) {
 				if (error) {
 					console.log(error.message);
@@ -432,9 +432,9 @@ app.get('/vip', function (req, res) {
 app.post('/vip', function (req, res) {
 	if(req.session.loggedin){
 		let searchValue = req.body.searchValue;
-		let query = 'SELECT u.id, u.name, uv.confirm_img, uv.from_date, uv.to_date, uv.status FROM USER u INNER JOIN user_vip uv ON u.uid = uv.uid';
+		let query = 'SELECT uv.id, u.name, uv.confirm_img, uv.from_date, uv.to_date, uv.status FROM USER u INNER JOIN user_vip uv ON u.uid = uv.uid';
 		if (searchValue === undefined) {
-			query = 'SELECT u.id, u.name, uv.confirm_img, uv.from_date, uv.to_date, uv.status FROM USER u INNER JOIN user_vip uv ON u.uid = uv.uid';
+			query = 'SELECT uv.id, u.name, uv.confirm_img, uv.from_date, uv.to_date, uv.status FROM USER u INNER JOIN user_vip uv ON u.uid = uv.uid';
 			connection.query(query, function (error, data, fields) {
 				if (error) {
 					console.log(error.message);
@@ -443,7 +443,7 @@ app.post('/vip', function (req, res) {
 			});
 		}
 		else {
-			query = 'SELECT u.id, u.name, uv.confirm_img, uv.from_date, uv.to_date, uv.status FROM USER u INNER JOIN user_vip uv ON u.uid = uv.uid WHERE name LIKE "%' + searchValue + '%"';
+			query = 'SELECT uv.id, u.name, uv.confirm_img, uv.from_date, uv.to_date, uv.status FROM USER u INNER JOIN user_vip uv ON u.uid = uv.uid WHERE name LIKE "%' + searchValue + '%"';
 			connection.query(query, function (error, data, fields) {
 				if (error) {
 					console.log(error.message);
@@ -593,7 +593,8 @@ app.get('/updateStatus', function (req, res) {
 	res.sendFile(path.join(__dirname + '/web/updateStatus.html'));
 })
 app.post('/updateStatus', function (req, res) {
-	let status = req.body.status;
+	let status = req.body.statusVip;
+	console.log(status);
 	console.log(idd);
 	if(req.session.loggedin === true){
 		connection.query('UPDATE user_vip SET status = ? WHERE id = ?', [status, idd], function (error, results) {
