@@ -127,7 +127,7 @@ app.get('/account', function (req, res, next) {
 		var offset;
 		offset = (limit * pageNumber) - limit;
 		if(offset < 0) offset = 0;
-		let query = `SELECT * FROM user ORDER BY id ASC LIMIT 5 OFFSET ${offset}` ;
+		let query = `SELECT * FROM user WHERE is_delete = '0' ORDER BY id ASC LIMIT 5 OFFSET ${offset}` ;
 			connection.query(query, function (error, data, fields) {
 				if (error) {
 					console.log(error.message);
@@ -142,9 +142,9 @@ app.get('/account', function (req, res, next) {
 app.post('/account', function (req, res, next) {
 	if(req.session.loggedin){
 		let searchValue = req.body.searchValue;
-		let query = 'SELECT * FROM user';
+		let query = `SELECT * FROM user WHERE is_delete = '0'`;
 		if (searchValue === undefined) {
-			query = 'SELECT * FROM user';
+			query = `SELECT * FROM user WHERE is_delete = '0'`;
 			connection.query(query, function (error, data, fields) {
 				if (error) {
 					console.log(error.message);
@@ -153,7 +153,7 @@ app.post('/account', function (req, res, next) {
 			});
 		}
 		else {
-			query = 'SELECT * FROM user WHERE name LIKE "%' + searchValue + '%"';
+			query = `SELECT * FROM user WHERE is_delete = '0' AND name LIKE "%${searchValue}%"`;
 			connection.query(query, function (error, data, fields) {
 				if (error) {
 					console.log(error.message);
@@ -190,7 +190,7 @@ app.post('/manager', function (request, response) {
 	var Image = request.body.ImageUpdate;
 	let flat = true;
 	if(request.session.loggedin === true){
-		connection.query('UPDATE user SET is_vip = ?, avatar = ?, is_block = ?, block_deadline = ? WHERE uid = ?', [privacy, avatar, enable, enableFrom, id], function (error, results) {
+		connection.query('UPDATE user SET avatar = ?, is_block = ?, block_deadline = ? WHERE uid = ?', [ avatar, enable, enableFrom, id], function (error, results) {
 			if (error) {
 				flat = false;
 				console.log(error.message)
@@ -216,7 +216,7 @@ app.get('/report', function (req, res, next) {
 		var offset;
 		offset = (limit * pageNumber) - limit;
 		if(offset < 0) offset = 0;
-		let query = `select fb.id, u.name, fb.content, fb.feedbacktime, fb.img, fb.status from feedback fb inner join user u on fb.uid = u.uid ORDER BY id ASC LIMIT 5 OFFSET ${offset}`;
+		let query = `select fb.id, u.name, fb.content, fb.feedbacktime, fb.img, fb.status from feedback fb inner join user u on fb.uid = u.uid ORDER BY status DESC LIMIT 5 OFFSET ${offset}`;
 			connection.query(query, function (error, data, fields) {
 				if (error) {
 					console.log(error.message);
@@ -417,7 +417,7 @@ app.get('/vip', function (req, res) {
 		var offset;
 		offset = (limit * pageNumber) - limit;
 		if(offset < 0) offset = 0;
-		let query = `SELECT uv.id, u.name, uv.confirm_img, uv.from_date, uv.to_date, uv.status FROM USER u INNER JOIN user_vip uv ON u.uid = uv.uid ORDER BY u.id ASC LIMIT 5 OFFSET ${offset}` ;
+		let query = `SELECT uv.id, u.name, uv.confirm_img, uv.from_date, uv.to_date, uv.status FROM USER u INNER JOIN user_vip uv ON u.uid = uv.uid ORDER BY uv.status DESC LIMIT 5 OFFSET ${offset}` ;
 			connection.query(query, function (error, data, fields) {
 				if (error) {
 					console.log(error.message);
@@ -469,7 +469,7 @@ app.get('/listpet', function (req, res, next) {
 		offset = (limit * pageNumber) - limit;
 		if(offset < 0) offset = 0;
 		let query = `SELECT rp.id, rp.pet_id, rp.reason, rp.img, rp.created_time, u.name, rp.status FROM report
-		 rp INNER JOIN user u ON rp.report_by = u.uid ORDER BY id ASC LIMIT 5 OFFSET ${offset}`;
+		 rp INNER JOIN user u ON rp.report_by = u.uid ORDER BY rp.status DESC LIMIT 5 OFFSET ${offset}`;
 			connection.query(query, function (error, data, fields) {
 				if (error) {
 					console.log(error.message);
