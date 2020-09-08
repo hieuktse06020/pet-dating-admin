@@ -484,9 +484,9 @@ app.get('/listpet', function (req, res, next) {
 app.post('/listpet', function (req, res, next) {
 	if(req.session.loggedin){
 		let searchValue = req.body.searchValue;
-		let query = 'SELECT rp.id, rp.pet_id, rp.reason, rp.created_time, u.name, rp.status FROM report rp INNER JOIN `user` u ON rp.report_by = u.uid';
+		let query = 'SELECT rp.id, rp.pet_id, rp.reason, rp.img, rp.created_time, u.name, rp.status FROM report rp INNER JOIN `user` u ON rp.report_by = u.uid';
 		if (searchValue === undefined) {
-			query = 'SELECT rp.id, rp.pet_id, rp.reason, rp.created_time, u.name, rp.status FROM report rp INNER JOIN `user` u ON rp.report_by = u.uid';
+			query = 'SELECT rp.id, rp.pet_id, rp.reason, rp.img, rp.created_time, u.name, rp.status FROM report rp INNER JOIN `user` u ON rp.report_by = u.uid';
 			connection.query(query, function (error, data, fields) {
 				if (error) {
 					console.log(error.message);
@@ -495,7 +495,7 @@ app.post('/listpet', function (req, res, next) {
 			});
 		}
 		else {
-			query = 'SELECT rp.id, rp.pet_id, rp.reason, rp.created_time, u.name, rp.status FROM report rp INNER JOIN `user` u ON rp.report_by = u.uid WHERE name LIKE "%' + searchValue + '%"';
+			query = 'SELECT rp.id, rp.pet_id, rp.reason, rp.img, rp.created_time, u.name, rp.status FROM report rp INNER JOIN `user` u ON rp.report_by = u.uid WHERE name LIKE "%' + searchValue + '%"';
 			connection.query(query, function (error, data, fields) {
 				if (error) {
 					console.log(error.message);
